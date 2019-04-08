@@ -1,0 +1,7 @@
+flask==1.0.2
+thrift==0.11.0
+sasl==0.2.1
+thrift-sasl==0.3.0
+pyhive==0.6.1
+xlsxwriter==1.1.2
+requests==2.21.0

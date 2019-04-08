@@ -1,0 +1,43 @@
+{
+    "name": "Teacher Performance Daily",
+    "pre_exec": [
+        "scripts/teacher-pref/pf_1_setting.sql",
+        "scripts/teacher-pref/pf_2_teacher_info.sql",
+        "scripts/teacher-pref/pf_3_sys_1.5_class.sql",
+        "scripts/teacher-pref/pf_4_sys_2.0_class.sql",
+        "scripts/teacher-pref/pf_5_class_stat.sql",
+        "scripts/teacher-pref/pf_6_fix_teacher_leave.sql",
+        "scripts/teacher-pref/pf_7_build_teacher_timeslot.sql",
+        "scripts/teacher-pref/pf_8_teacher_stat.sql"
+    ],
+    "exec": [{
+        "header": [
+            "课时ID\nClass ID, 课程类型\nClass Type, 外教ID\nTeacher ID, 外教姓名\nTeacher Name",
+            ", 课程开始时间\nClass Start Time, 老师进入时间\nTeacher Entrance Time, 迟到秒数\nSeconds of Lateness",
+            ", 课程结束时间\nClass Ending Time, 老师退出时间\nTeacher Exit Time, 早退秒数\nSeconds of Leaving Early",
+            ", 是否按时提交评语\nSubmitted Reports or not\n(1 for yes; 0 for no), 系统平台\nPlatform"
+        ],
+        "sql": [
+            "SELECT class_id, class_course_type_code, teacher_id",
+            "  , english_name, start_time, entry_time, come_late_secs",
+            "  , end_time, exit_time, leave_early_secs, is_fb_on_time, sys",
+            "FROM memory.teacher_pref.ystd_class"
+        ],
+        "filename": "{MMdd} - Teacher Attendance Daily Report外教出勤日报 - Class Breakdown课时明细"
+    }, {
+        "header": [
+            "老师ID\nTeacher ID, 老师姓名\nTeacher Name, 签约课时\nService Agreement Slots",
+            ", 总课时数\nSupposed Working Slots\n(Considering leaving hours), 总排课数\nAssigned Teaching Slots",
+            ", 请假次数\nLeave Records, 请假课时\nSlots affected by Leave, 旷工次数\nAbsence Records",
+            ", 旷工课时\nSlots affected by Absence, 迟到次数\nLateness, 迟到总时长(秒)\nTotal late seconds",
+            ", 早退次数\nLeaving Early, 早退总时长(秒)\nTotal leaving early seconds, 未提交评语数\nUnsubmitted Reports"
+        ],
+        "sql": [
+            "SELECT teacher_id, english_name, signed_cls_cnt, avl_cls_cnt, cls_cnt",
+            "  , leave_cnt, leave_cls_cnt, abst_cnt, abst_cls_cnt, come_late_cnt",
+            "  , come_late_secs_amt, leave_early_cnt, leave_early_secs_amt, fb_delayed_cnt",
+            "FROM memory.teacher_pref.ystd_teacher_stat"
+        ],
+        "filename": "{MMdd} - Teacher Attendance Daily Report外教出勤日报 - General总览"
+    }]
+}

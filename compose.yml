@@ -1,0 +1,69 @@
+version: "3.4"
+services:
+  qa:
+    environment:
+      - CLASSROOM_ENV=qa
+      - APPNAME=qa-admin2.uuabc.com
+    image: registry.cn-hangzhou.aliyuncs.com/uuabc/${PROJECT}:${VERSION}
+#    container_name: segmentwh
+#    depends_on:
+#      - db
+#      - redis
+    ports:
+      - target: 80
+        published: 8888
+        protocol: tcp
+        mode: ingress
+    extra_hosts:
+      - "gitlab.51uuabc.com:10.68.100.23"
+      - "scheduleproxy.uuabc.com:172.16.188.252"
+    volumes:
+      - /data/logData:/logs
+#    volumes:
+#      - type: volume
+#        source: logdata
+#        target: /logs
+#        volume:
+#          nocopy: true
+#      - type: bind
+#        source: ./static
+#        target: /opt/app/static
+#    logging:
+#      driver: gelf
+#      options:
+#        gelf-address: "udp://graylog.it.uuabc.com:12201"
+#        tag: "testing"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/check.html || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "3.9"
+          memory: 4G
+      restart_policy:
+        condition: on-failure
+    configs:
+      - source: qa_cfg
+        target: /config/saas_list.php
+#        uid: '103'
+#        gid: '103'
+#        mode: 0440
+
+#volumes:
+#  logdata:
+#    driver: local
+#    driver_opts:
+#      type: nfs
+#      o: addr=172.16.115.130,rw
+#      device: ":/data/logdata"
+#networks:
+#  segment:
+
+configs:
+  qa_cfg:
+    file: ./config/saas_list.php
